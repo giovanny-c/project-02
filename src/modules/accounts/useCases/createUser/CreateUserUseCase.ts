@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ICreateUserDTO } from "../../dtos/ICreateUserDTO";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
-
+import { hash } from "bcryptjs";
 
 @injectable()
 class CreateUserUseCase {
@@ -15,8 +15,8 @@ class CreateUserUseCase {
 
 
     async execute({ name, email, password }: ICreateUserDTO): Promise<void> {
-        //pegar os dados por form no front
-        //
+        //pegar os dados por form no front (multer e erc)
+        //hash de senha 
         try {
             const UserExists = await this.usersRepository.findByEmail(email)
 
@@ -24,7 +24,9 @@ class CreateUserUseCase {
                 throw new Error("This user already exists")//fazer middleware de error
             }
 
-            await this.usersRepository.create({ name, email, password })
+            const passwordHash = await hash(password, 8)
+
+            await this.usersRepository.create({ name, email, password: passwordHash })
 
         } catch (error) {
             throw new Error("There was not possible to create a user, please try again. If the error persists contact the suport")

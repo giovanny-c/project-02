@@ -6,6 +6,7 @@ import { accountRoutes } from "./routes/account.routes"
 
 
 import "./database"
+import "./shared/container"
 
 const app = express()
 
