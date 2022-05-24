@@ -1,6 +1,7 @@
 import { container } from "tsyringe";
 import { Request, Response } from "express";
 import { CreateUserUseCase } from "./CreateUserUseCase";
+import { send } from "process";
 
 
 class CreateUserController {
