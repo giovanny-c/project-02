@@ -10,7 +10,7 @@ export const dataSource: DataSource = new DataSource({
     password: "1234",
     database: "projeto02_database",
     migrationsRun: true,
-    logging: true,
+    //logging: true,
     entities: [
         "src/modules/**/entities/*.ts"
     ],
