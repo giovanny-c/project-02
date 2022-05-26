@@ -16,6 +16,9 @@ class User {
     @Column()
     password: string
 
+    @Column()
+    is_confirmed: boolean
+
 
 }
 

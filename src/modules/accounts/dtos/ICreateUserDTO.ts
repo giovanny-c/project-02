@@ -8,6 +8,8 @@ interface ICreateUserDTO {
     email: string
 
     password: string
+
+    is_confirmed?: boolean
 }
 
 export { ICreateUserDTO }

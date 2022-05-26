@@ -18,7 +18,14 @@ dayjs.tz.setDefault("America/Sao_Paulo")//timezone
 class DayjsDateProvider implements IDateProvider {
 
 
+    compareDiferenceInHours(start_date: Date, end_date: Date): number {
 
+        return dayjs(end_date).diff(start_date, "hours") //faz a comparaçao
+    }
+
+    compareIfBefore(start_date: Date, end_date: Date): boolean { //se adata passada é antes da data final
+        return dayjs(start_date).isBefore(end_date)
+    }
 
 
     addOrSubtractTime(operation: string = ("sub" || "add"), timeUnit: string, amountOfTime: number, date?: string | Date) {
