@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }))//front
 app.use(express.static('public'))//front
 app.use(methodOverride('_method'))//front
 
-app.use(accountRoutes)
+app.use("/accounts", accountRoutes)
 
 //front
 app.set("view engine", "njk")

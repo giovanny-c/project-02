@@ -10,6 +10,7 @@ const signInController = new SignInController()
 
 accountRoutes.post("/sign-in", createUserController.handle)
 accountRoutes.get("/sign-in", signInController.handle)
+//accountRoutes.post("/confirmation", )
 
 // accountRoutes.post("/log-in", (request, response) => {
 //     return response.json("hello")

@@ -20,7 +20,8 @@ class EtherealMailProvider implements IMailProvider {
                 auth: {
                     user: account.user,
                     pass: account.pass
-                }
+                },
+
             })
 
             this.client = transporter
