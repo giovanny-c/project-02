@@ -5,7 +5,7 @@ import auth from "../../../../config/auth";
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
-
+import { v4 as uuidV4 } from "uuid"
 
 interface IResponse {
     user: {
@@ -24,7 +24,7 @@ class AuthenticateUserUseCase {
         private usersRepository: IUsersRepository,
         @inject("UsersTokensRepository")
         private usersTokensRepository: IUsersTokensRepository,
-        @inject("DayjsDataProvider")
+        @inject("DayjsDateProvider")
         private DateProvider: IDateProvider
     ) {
 
@@ -46,24 +46,33 @@ class AuthenticateUserUseCase {
             throw new Error("email or password incorrect")
         }
 
-        //bearer token
-        const token = sign({}, secret_token, {
+        //deleta todos os tokens de outros logins
+        //await this.usersTokensRepository.deleteByUserId(user.id)
+
+        //bearer token/ id token
+        const token = sign({ email }, secret_token, {
             subject: user.id,
             expiresIn: expires_in_token
         })
 
         //refresh token
-        const refresh_token = sign({ email }, secret_refresh_token, {
+        const refresh_token = sign({}, secret_refresh_token, {
             subject: user.id,
             expiresIn: expires_in_refresh_token
         })
+
+        //cria a familia do refresh token
+        const token_family = uuidV4()
 
         const refresh_token_expires_date = this.DateProvider.addOrSubtractTime("add", "day", expires_refresh_token_days)
 
         await this.usersTokensRepository.create({
             refresh_token: refresh_token,
             expires_date: refresh_token_expires_date, //30d
-            user_id: user.id
+            user_id: user.id,
+            is_valid: true,
+            was_used: false,
+            token_family
         })
 
         const tokenReturn: IResponse = {

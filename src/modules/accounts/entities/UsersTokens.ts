@@ -22,6 +22,15 @@ class UsersTokens {
     @CreateDateColumn()
     created_at: Date
 
+    @Column()
+    is_valid: boolean
+
+    @Column()
+    was_used: boolean
+
+    @Column()
+    token_family: string
+
 
 
 }

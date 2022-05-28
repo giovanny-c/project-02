@@ -9,8 +9,10 @@ interface IPayload {
 }
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
-
+    //se o token tiver expirado fazer logica do refresh token
     const authHeader = req.headers.authorization
+
+    console.log(authHeader)
 
     if (!authHeader) {
         throw new Error("Token missing")
@@ -27,6 +29,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
         req.user = {
             id: user_id
         }
+
 
         next()
     } catch (error) {
