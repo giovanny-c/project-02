@@ -12,6 +12,7 @@ class UsersTokensRepository implements IUsersTokensRepository {
         this.repository = dataSource.getRepository(UsersTokens)
     }
 
+
     async create({ expires_date, refresh_token, user_id, is_valid, was_used, token_family }: ICreateUserTokenDTO): Promise<UsersTokens> {
         const userToken = this.repository.create({
             expires_date,
@@ -49,6 +50,30 @@ class UsersTokensRepository implements IUsersTokensRepository {
     async deleteByUserId(user_id: string): Promise<void> {
         await this.repository.delete(user_id)
     }
+
+    async setTokenAsInvalidAndUsed(id: string): Promise<void> {
+
+        const token = this.repository.create({
+            id,
+            is_valid: false,
+            was_used: true
+        })
+    }
+
+    async setTokenFamilyAsInvalid(token_family: string): Promise<void> {
+
+        const tokens = await this.repository.findBy({ token_family })
+
+
+        tokens.forEach(token => {
+            token.is_valid = false
+        });
+
+        console.log(tokens)
+
+        await this.repository.save(tokens)
+    }
+
 }
 
 export { UsersTokensRepository }

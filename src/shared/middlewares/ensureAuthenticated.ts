@@ -1,13 +1,19 @@
 import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
-import { userInfo } from "os";
+
 import auth from "../../config/auth";
-import { dataSource } from "../../database";
+import { TokenExpiredError } from "jsonwebtoken";
 
 
-interface IPayload {
-    sub: string
-    exp: number
+//para tratar o erro
+const catchError = (err, res) => {
+    if (err instanceof TokenExpiredError) { //se o token tiver expirado
+
+        //throw new Error("")
+        return res.status(401).redirect("/refresh-token")
+    }
+    //outro tipo de error
+    return res.status(401).send({ message: "Unauthorized!" });
 }
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
@@ -15,9 +21,10 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
     const authHeader = req.headers.authorization
     //como pegar os tokens?
 
-    const t = req.headers['x-access-token']//?['refresh_token']
 
-    console.log(t)
+    // const t = req.headers['x-access-token']//?['refresh_token']
+
+    // console.log(t)
 
 
 
@@ -25,34 +32,24 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
         throw new Error("Token missing")
     }
 
-    const [, token, /*refresh_token*/] = authHeader.split(" ")
+    const [, token] = authHeader.split(" ")
     //separar os tokens com espaço
 
-    try {
-        const { sub: user_id } = verify(
-            token,
-            auth.secret_token, //palavra-chave
+    verify(token, auth.secret_token, (err, decoded) => {
 
-        ) as IPayload
-
-        req.user = {
-            id: user_id
+        if (err) {
+            return catchError(err, res)
         }
 
-        // verify(
-        //     refresh_token,
-        //     auth.secret_refresh_token
-        // )
-        //logica do refresh token aqui
+        req.user = {
+            id: decoded.sub as string
+        }
 
-
-    } catch (error) {
-        throw new Error("Invalid token, 400")
-    }
+        next()
+    })
 
 
 
-    //next()
 
 
 
