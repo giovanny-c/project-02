@@ -15,13 +15,17 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
     const authHeader = req.headers.authorization
     //como pegar os tokens?
 
+    const t = req.headers['x-access-token']//?['refresh_token']
+
+    console.log(t)
+
 
 
     if (!authHeader) {
         throw new Error("Token missing")
     }
 
-    const [, token, refresh_token] = authHeader.split(" ")
+    const [, token, /*refresh_token*/] = authHeader.split(" ")
     //separar os tokens com espaço
 
     try {
@@ -35,10 +39,10 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
             id: user_id
         }
 
-        verify(
-            refresh_token,
-            auth.secret_refresh_token
-        )
+        // verify(
+        //     refresh_token,
+        //     auth.secret_refresh_token
+        // )
         //logica do refresh token aqui
 
 
@@ -48,7 +52,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
 
 
-    next()
+    //next()
 
 
 
