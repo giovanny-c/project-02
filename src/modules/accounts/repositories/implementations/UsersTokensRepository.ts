@@ -58,6 +58,8 @@ class UsersTokensRepository implements IUsersTokensRepository {
             is_valid: false,
             was_used: true
         })
+
+        await this.repository.save(token)
     }
 
     async setTokenFamilyAsInvalid(token_family: string): Promise<void> {

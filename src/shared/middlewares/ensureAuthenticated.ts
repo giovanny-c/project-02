@@ -6,25 +6,27 @@ import { TokenExpiredError } from "jsonwebtoken";
 
 
 //para tratar o erro
-const catchError = (err, res) => {
+const catchError = (err, res, refresh_token) => {
     if (err instanceof TokenExpiredError) { //se o token tiver expirado
 
         //throw new Error("")
-        return res.status(401).redirect("/refresh-token")
+        return res.status(400).send({ message: "token expired (go to /refresh-token), Please Log-in again" })
     }
     //outro tipo de error
-    return res.status(401).send({ message: "Unauthorized!" });
+    return res.status(400).redirect("/accounst/log-in");
 }
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
     //se o token tiver expirado fazer logica do refresh token
     const authHeader = req.headers.authorization
-    //como pegar os tokens?
 
+
+    //como pegar os tokens?
+    const url = `${req.protocol}://${req.headers.host}${req.originalUrl}`
 
     // const t = req.headers['x-access-token']//?['refresh_token']
 
-    // console.log(t)
+    console.log(url)
 
 
 
@@ -38,7 +40,8 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
     verify(token, auth.secret_token, (err, decoded) => {
 
         if (err) {
-            return catchError(err, res)
+            const refresh_token = "1232"
+            return catchError(err, res, refresh_token)
         }
 
         req.user = {

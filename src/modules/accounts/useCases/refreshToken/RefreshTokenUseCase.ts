@@ -27,11 +27,12 @@ class RefreshTokenUseCase {
     }
 
     async execute(refresh_token: string): Promise<IResponse> {
-
+        console.log("refresh")
         const refreshToken = await this.usersTokensRepository.findByRefreshToken(refresh_token)
 
         //verificar se o token existe ou esta invalido
         if (!refreshToken || refreshToken.is_valid === false) {
+
             throw new Error("Conection expired (Invalid token). Please Log-in again. 400")
 
         }
@@ -58,17 +59,17 @@ class RefreshTokenUseCase {
         //marcar rf token como usado e invalid
         this.usersTokensRepository.setTokenAsInvalidAndUsed(refreshToken.id)
 
-        const { email } = await this.usersRepository.findById(refreshToken.user_id)
+        const { id: user_id, email } = await this.usersRepository.findById(refreshToken.user_id)
 
         //cria um novo token
         const newToken = sign({ email }, auth.secret_token, {
-            subject: refreshToken.user_id,
+            subject: user_id,
             expiresIn: auth.expires_in_token
         })
 
         //cria um novo rf
         const newRefreshToken = sign({}, auth.secret_refresh_token, {
-            subject: refreshToken.user_id, // com o mesmo user id
+            subject: user_id, // com o mesmo user id
             expiresIn: auth.expires_in_refresh_token
         })
 
@@ -79,7 +80,7 @@ class RefreshTokenUseCase {
         await this.usersTokensRepository.create({
             refresh_token: newRefreshToken,
             expires_date: newRefreshTokenExpiresDate,
-            user_id: refreshToken.user_id,
+            user_id,
             is_valid: true,
             was_used: false,
             token_family: refreshToken.token_family //mesma familia
