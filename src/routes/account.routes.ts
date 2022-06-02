@@ -9,6 +9,7 @@ import { GetProfileController } from "../modules/accounts/useCases/getProfile/Ge
 
 import { ensureAuthenticated } from "../shared/middlewares/ensureAuthenticated";
 import { RefreshTokenController } from "../modules/accounts/useCases/refreshToken/RefreshTokenController";
+import { LogOutController } from "../modules/accounts/useCases/logout/LogOutController";
 
 const accountRoutes = Router()
 
@@ -18,6 +19,7 @@ const confirmateRegisterController = new ConfirmateRegisterController()
 const authenticateUserController = new AuthenticateUserController()
 const getProfileController = new GetProfileController()
 const refreshTokenController = new RefreshTokenController()
+const logOutController = new LogOutController()
 
 accountRoutes.post("/sign-in", createUserController.handle)
 accountRoutes.get("/sign-in", signInController.handle)
@@ -30,6 +32,8 @@ accountRoutes.post("/refresh-token", refreshTokenController.handle)
 
 accountRoutes.get("/profile", ensureAuthenticated, getProfileController.handle)
 
-// Fazer um sistema de refresh token(rota) melhor do que o da RocketSeat
+accountRoutes.post("/log-out", ensureAuthenticated, logOutController.handle)
+
 // como passar o bearer token automaticamente para todas as rotas
+//como mandar do ensureAuthenticated para /refresh-token?
 export { accountRoutes }

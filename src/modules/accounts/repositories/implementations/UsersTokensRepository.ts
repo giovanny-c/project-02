@@ -62,9 +62,16 @@ class UsersTokensRepository implements IUsersTokensRepository {
         await this.repository.save(token)
     }
 
-    async setTokenFamilyAsInvalid(token_family: string): Promise<void> {
+    async setTokenFamilyAsInvalid(uuid: string): Promise<void> {
 
-        const tokens = await this.repository.findBy({ token_family })
+        const tokens = await this.repository.find(
+            {
+                where: [
+                    { token_family: uuid },
+                    // OR
+                    { user_id: uuid }
+                ]
+            })
 
 
         tokens.forEach(token => {

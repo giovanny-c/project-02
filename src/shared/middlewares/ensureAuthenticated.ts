@@ -6,10 +6,11 @@ import { TokenExpiredError } from "jsonwebtoken";
 
 
 //para tratar o erro
-const catchError = (err, res, refresh_token) => {
+const catchError = (err, res) => {
     if (err instanceof TokenExpiredError) { //se o token tiver expirado
 
-        //throw new Error("")
+        //throw new Error("") 
+        //como passar daaqui para rota refresh-token
         return res.status(400).send({ message: "token expired (go to /refresh-token), Please Log-in again" })
     }
     //outro tipo de error
@@ -40,8 +41,8 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
     verify(token, auth.secret_token, (err, decoded) => {
 
         if (err) {
-            const refresh_token = "1232"
-            return catchError(err, res, refresh_token)
+
+            return catchError(err, res)
         }
 
         req.user = {
