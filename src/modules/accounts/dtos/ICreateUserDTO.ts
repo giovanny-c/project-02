@@ -10,6 +10,8 @@ interface ICreateUserDTO {
     password: string
 
     is_confirmed?: boolean
+
+    is_logged?: boolean
 }
 
 export { ICreateUserDTO }

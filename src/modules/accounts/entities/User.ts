@@ -19,6 +19,9 @@ class User {
     @Column()
     is_confirmed: boolean
 
+    @Column()
+    is_logged: boolean
+
 
 }
 

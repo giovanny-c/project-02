@@ -28,7 +28,11 @@ class RefreshTokenUseCase {
 
     async execute(refresh_token: string): Promise<IResponse> {
         console.log("refresh")
+
         const refreshToken = await this.usersTokensRepository.findByRefreshToken(refresh_token)
+
+        const { id: user_id, email, is_logged } = await this.usersRepository.findById(refreshToken.user_id)
+
 
         //verificar se o token existe ou esta invalido
         if (!refreshToken || refreshToken.is_valid === false) {
@@ -55,11 +59,18 @@ class RefreshTokenUseCase {
             throw new Error("Conection expired (token expired). Please Log-in again. 400")
         }
 
+        //se o user nao estiver marcado como logado
+        if (is_logged === false) {
+            throw new Error("Conection expired (token expired). Please Log-in again. 400")
+
+        }
+
+
         //se nao cair nas exeptions
         //marcar rf token como usado e invalid
         this.usersTokensRepository.setTokenAsInvalidAndUsed(refreshToken.id)
 
-        const { id: user_id, email } = await this.usersRepository.findById(refreshToken.user_id)
+
 
         //cria um novo token
         const newToken = sign({ email }, auth.secret_token, {

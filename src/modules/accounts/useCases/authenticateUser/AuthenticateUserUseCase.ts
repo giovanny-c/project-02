@@ -46,8 +46,11 @@ class AuthenticateUserUseCase {
             throw new Error("email or password incorrect")
         }
 
+
+        await this.usersRepository.markUserAsLogged(user.id)
+
         //deleta todos os tokens de outros logins
-        //await this.usersTokensRepository.deleteByUserId(user.id)
+        await this.usersTokensRepository.deleteByUserId(user.id)
 
         //bearer token/ id token
         const token = sign({ email }, secret_token, {
@@ -74,6 +77,7 @@ class AuthenticateUserUseCase {
             was_used: false,
             token_family
         })
+
 
         const tokenReturn: IResponse = {
 

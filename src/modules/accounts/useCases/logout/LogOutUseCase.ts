@@ -19,6 +19,8 @@ class LogOutUseCase {
 
     async execute(user_id: string): Promise<void> {
 
+        await this.usersRepository.unmarkUserAsLogged(user_id)
+
         await this.usersTokensRepository.setTokenFamilyAsInvalid(user_id)
 
 
