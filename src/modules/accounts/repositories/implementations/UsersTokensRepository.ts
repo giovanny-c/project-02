@@ -31,14 +31,14 @@ class UsersTokensRepository implements IUsersTokensRepository {
 
         const userToken = await this.repository.findOne({
             where: { user_id, refresh_token }
-        })
+        }) as UsersTokens
 
         return userToken
     }
 
     async findByRefreshToken(refresh_token: string): Promise<UsersTokens> {
 
-        const userToken = await this.repository.findOne({ where: { refresh_token } })
+        const userToken = await this.repository.findOne({ where: { refresh_token } }) as UsersTokens
 
         return userToken
 

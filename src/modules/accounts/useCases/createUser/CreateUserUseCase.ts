@@ -55,7 +55,7 @@ class CreateUserUseCase {
 
         await this.usersTokensRepository.create({
             refresh_token: token,
-            user_id: user.id,
+            user_id: user.id as string,
             expires_date
         })
 

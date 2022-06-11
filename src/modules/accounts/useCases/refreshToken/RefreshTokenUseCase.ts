@@ -91,7 +91,7 @@ class RefreshTokenUseCase {
         await this.usersTokensRepository.create({
             refresh_token: newRefreshToken,
             expires_date: newRefreshTokenExpiresDate,
-            user_id,
+            user_id: user_id as string,
             is_valid: true,
             was_used: false,
             token_family: refreshToken.token_family //mesma familia

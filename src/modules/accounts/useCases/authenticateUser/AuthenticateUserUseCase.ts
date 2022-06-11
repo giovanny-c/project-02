@@ -47,10 +47,10 @@ class AuthenticateUserUseCase {
         }
 
 
-        await this.usersRepository.markUserAsLogged(user.id)
+        await this.usersRepository.markUserAsLogged(user.id as string)
 
         //deleta todos os tokens de outros logins
-        await this.usersTokensRepository.deleteByUserId(user.id)
+        await this.usersTokensRepository.deleteByUserId(user.id as string)
 
         //bearer token/ id token
         const token = sign({ email }, secret_token, {
@@ -72,7 +72,7 @@ class AuthenticateUserUseCase {
         await this.usersTokensRepository.create({
             refresh_token: refresh_token,
             expires_date: refresh_token_expires_date, //30d
-            user_id: user.id,
+            user_id: user.id as string,
             is_valid: true,
             was_used: false,
             token_family

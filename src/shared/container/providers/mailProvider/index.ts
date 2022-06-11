@@ -13,5 +13,7 @@ const mailProvider = {
 
 container.registerInstance<IMailProvider>(
     "MailProvider",
-    mailProvider[process.env.MAIL_PROVIDER]
+    mailProvider[process.env.MAIL_PROVIDER as string]
+    //força como tipo string para nao ter erro
+    //com o strict null check = true
 )
