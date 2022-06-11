@@ -1,4 +1,5 @@
 import { inject, injectable } from "tsyringe";
+import { getExecutionTime } from "../../../../../utils/executionTime";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
 interface UserResponse {
@@ -15,6 +16,7 @@ class GetProfileUseCase {
         private usersRepository: IUsersRepository
     ) { }
 
+    @getExecutionTime()
     async execute(id: string): Promise<UserResponse> {
 
         const user = await this.usersRepository.findById(id)
