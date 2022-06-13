@@ -31,16 +31,16 @@ class UsersTokensRepository implements IUsersTokensRepository {
 
         const userToken = await this.repository.findOne({
             where: { user_id, refresh_token }
-        }) as UsersTokens
+        })
 
-        return userToken
+        return userToken as UsersTokens
     }
 
     async findByRefreshToken(refresh_token: string): Promise<UsersTokens> {
 
-        const userToken = await this.repository.findOne({ where: { refresh_token } }) as UsersTokens
+        const userToken = await this.repository.findOne({ where: { refresh_token } })
 
-        return userToken
+        return userToken as UsersTokens
 
     }
     async deleteById(id: string): Promise<void> {
@@ -48,7 +48,7 @@ class UsersTokensRepository implements IUsersTokensRepository {
     }
 
     async deleteByUserId(user_id: string): Promise<void> {
-        await this.repository.delete(user_id)
+        await this.repository.delete({ user_id })
     }
 
     async setTokenAsInvalidAndUsed(id: string): Promise<void> {
@@ -65,6 +65,7 @@ class UsersTokensRepository implements IUsersTokensRepository {
     async setTokenFamilyAsInvalid(uuid: string): Promise<void> {
 
         const tokens = await this.repository.find(
+
             {
                 where: [
                     { token_family: uuid },

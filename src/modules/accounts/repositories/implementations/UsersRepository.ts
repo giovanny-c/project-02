@@ -45,14 +45,14 @@ class UsersRepository implements IUsersRepository {
         return user //nao retornar infos sensiveis
     }
     async findById(id: string): Promise<User> {
-        const user = await this.repository.findOneBy({ id }) as User
+        const user = await this.repository.findOneBy({ id })
 
-        return user
+        return user as User
     }
     async findByEmail(email: string): Promise<User> {
-        const user = await this.repository.findOneBy({ email }) as User
+        const user = await this.repository.findOneBy({ email })
 
-        return user
+        return user as User
     }
 
 
