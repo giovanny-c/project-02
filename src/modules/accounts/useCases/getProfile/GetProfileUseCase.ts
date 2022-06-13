@@ -1,5 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { getExecutionTime } from "../../../../../utils/decorators/executionTime";
+import { inspect } from "../../../../../utils/decorators/inspect";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
 interface UserResponse {
@@ -16,7 +17,8 @@ class GetProfileUseCase {
         private usersRepository: IUsersRepository
     ) { }
 
-    @getExecutionTime()
+    @inspect()
+    @getExecutionTime() // modifica o execTime primeiro e depois o inspect 
     async execute(id: string): Promise<UserResponse> {
 
         const user = await this.usersRepository.findById(id)

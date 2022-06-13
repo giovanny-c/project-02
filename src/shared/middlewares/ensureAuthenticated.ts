@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verify } from "jsonwebtoken";
+import { JwtPayload, verify } from "jsonwebtoken";
 
 import auth from "../../config/auth";
 import { TokenExpiredError } from "jsonwebtoken";
@@ -27,7 +27,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
     // const t = req.headers['x-access-token']//?['refresh_token']
 
-    console.log(url)
+
 
 
 
@@ -38,7 +38,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
     const [, token] = authHeader.split(" ")
     //separar os tokens com espaço
 
-    verify(token, auth.secret_token, (err, decoded) => {
+    verify(token, auth.secret_token, (err, decoded: string | JwtPayload) => {
 
         if (err) {
 
