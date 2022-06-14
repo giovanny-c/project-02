@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import { dataSource } from "../../../../database";
 import { ICreateUserTokenDTO } from "../../dtos/ICreateUserTokenDTO";
+import { ISetTokenFamilyInvalidDTO } from "../../dtos/ISetTokenFamilyInvalidDTO";
 import { UsersTokens } from "../../entities/UsersTokens";
 import { IUsersTokensRepository } from "../IUsersTokensRepository";
 
@@ -62,17 +63,19 @@ class UsersTokensRepository implements IUsersTokensRepository {
         await this.repository.save(token)
     }
 
-    async setTokenFamilyAsInvalid(uuid: string): Promise<void> {
+    async setTokenFamilyAsInvalid({ token_family, user_id }: ISetTokenFamilyInvalidDTO): Promise<void> {
 
-        const tokens = await this.repository.find(
+        const tokens = await this.repository.find({
+            where: [
 
-            {
-                where: [
-                    { token_family: uuid },
-                    // OR
-                    { user_id: uuid }
-                ]
-            })
+                { token_family },
+
+                { user_id }
+            ]
+        })
+
+
+
 
 
         tokens.forEach(token => {

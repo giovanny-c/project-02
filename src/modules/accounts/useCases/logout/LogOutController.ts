@@ -8,7 +8,7 @@ class LogOutController {
 
     async handle(req: Request, res: Response): Promise<Response> {
 
-        const { id } = req.user || req.body || req.query
+        const { id } = req.user // || req.body || req.query
 
         const logOut = container.resolve(LogOutUseCase)
 

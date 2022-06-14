@@ -36,4 +36,8 @@ accountRoutes.post("/log-out", ensureAuthenticated, logOutController.handle)
 
 // como passar o bearer token automaticamente para todas as rotas
 //como mandar do ensureAuthenticated para /refresh-token?
+
+//header 
+//authorization: Bearer sd1a1s432das-34fdsfdes...
+//refresh_token: 42jdf944jhr-23fd3d.....
 export { accountRoutes }

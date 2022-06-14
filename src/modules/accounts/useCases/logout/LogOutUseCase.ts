@@ -21,7 +21,7 @@ class LogOutUseCase {
 
         await this.usersRepository.unmarkUserAsLogged(user_id)
 
-        await this.usersTokensRepository.setTokenFamilyAsInvalid(user_id)
+        await this.usersTokensRepository.setTokenFamilyAsInvalid({ user_id })
 
 
     }

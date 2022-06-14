@@ -43,7 +43,7 @@ class RefreshTokenUseCase {
         //se ja foi usado
         if (refreshToken.was_used === true) {
             //invalida todos os tokens da mesma familia(mesmo criados posteriormente)
-            await this.usersTokensRepository.setTokenFamilyAsInvalid(refreshToken.token_family)
+            await this.usersTokensRepository.setTokenFamilyAsInvalid({ token_family: refreshToken.token_family })
 
             //desloga usuario (user tem que logar dnv para gerar um novo token de outra familia)
             throw new Error("Conection expired (Invalid token). Please Log-in again. 400")

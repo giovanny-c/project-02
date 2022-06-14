@@ -12,9 +12,12 @@ class UsersTokens {
     @Column()
     refresh_token: string
 
+    @Column()
+    user_id: string
+
     @ManyToOne(() => User)
     @JoinColumn({ name: "user_id" })
-    user_id: string
+    user: string
 
     @Column()
     expires_date: Date
