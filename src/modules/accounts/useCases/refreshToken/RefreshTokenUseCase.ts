@@ -33,9 +33,16 @@ class RefreshTokenUseCase {
 
         const { id: user_id, email, is_logged } = await this.usersRepository.findById(refreshToken.user_id)
 
+        //verificar se o token existe
+        if (!refreshToken) {
+            throw new Error("Token Missing. Please Log-in")
+        }
 
-        //verificar se o token existe ou esta invalido
-        if (!refreshToken || refreshToken.is_valid === false) {
+        //ou esta invalido
+        if (refreshToken.is_valid === false) {
+
+            //invalida todos os tokens da mesma familia(mesmo criados posteriormente)
+            await this.usersTokensRepository.setTokenFamilyAsInvalid({ token_family: refreshToken.token_family })
 
             throw new Error("Conection expired (Invalid token). Please Log-in again. 400")
 
@@ -59,18 +66,16 @@ class RefreshTokenUseCase {
             throw new Error("Conection expired (token expired). Please Log-in again. 400")
         }
 
-        //se o user nao estiver marcado como logado
-        if (is_logged === false) {
-            throw new Error("Conection expired (token expired). Please Log-in again. 400")
-
-        }
-
 
         //se nao cair nas exeptions
         //marcar rf token como usado e invalid
         this.usersTokensRepository.setTokenAsInvalidAndUsed(refreshToken.id)
 
+        //se o user nao estiver marcado como logado
+        if (is_logged === false) {
+            throw new Error("Conection expired (token expired). Please Log-in again. 400")
 
+        }
 
         //cria um novo token
         const newToken = sign({ email }, auth.secret_token, {

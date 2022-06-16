@@ -23,7 +23,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
 
     //como pegar os tokens?
-    const url = `${req.protocol}://${req.headers.host}${req.originalUrl}`
+    // const url = `${req.protocol}://${req.headers.host}${req.originalUrl}`
 
     // const t = req.headers['x-access-token']//?['refresh_token']
 
