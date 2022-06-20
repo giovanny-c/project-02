@@ -12,7 +12,9 @@ import "./database"
 import "./shared/container"
 
 //routes
+import { errorHandler } from "./shared/errors/ErrorHandler" //colocar em cima?
 import { accountRoutes } from "./routes/account.routes"
+
 
 const app = express()
 
@@ -23,6 +25,8 @@ app.use(express.static('public'))//front
 app.use(methodOverride('_method'))//front
 
 app.use("/accounts", accountRoutes)
+
+app.use(errorHandler)
 
 //front
 app.set("view engine", "njk")
