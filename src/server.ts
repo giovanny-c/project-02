@@ -19,7 +19,6 @@ import { accountRoutes } from "./routes/account.routes"
 const app = express()
 
 app.use(express.json())
-
 app.use(express.urlencoded({ extended: true }))//front
 app.use(express.static('public'))//front
 app.use(methodOverride('_method'))//front

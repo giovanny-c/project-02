@@ -25,7 +25,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
 
         if (err) {
 
-            //ver se vai chamar o middleware de errorHandler
+            //vai chamar o middleware de errorHandler
             throw err
         }
 
