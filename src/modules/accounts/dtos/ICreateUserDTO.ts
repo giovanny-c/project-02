@@ -3,11 +3,11 @@ interface ICreateUserDTO {
 
     id?: string
 
-    name: string
+    name?: string
 
-    email: string
+    email?: string
 
-    password: string
+    password?: string
 
     is_confirmed?: boolean
 

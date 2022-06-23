@@ -30,13 +30,13 @@ class CreateUserUseCase {
         //pegar os dados por form no front (multer e erc)
         //hash de senha 
         try {
-            const UserExists = await this.usersRepository.findByEmail(email)
+            const UserExists = await this.usersRepository.findByEmail(email as string)
 
             if (UserExists) {
                 throw new Error("This user already exists")//fazer middleware de error
             }
 
-            const passwordHash = await hash(password, 8)
+            const passwordHash = await hash(password as string, 8)
 
             await this.usersRepository.create({ name, email, password: passwordHash })
 
@@ -46,7 +46,7 @@ class CreateUserUseCase {
 
         //envia link de confirmação de email (logar o user no usecase de confirmaçao)
 
-        const user = await this.usersRepository.findByEmail(email)
+        const user = await this.usersRepository.findByEmail(email as string)
 
         const templatePath = resolve(__dirname, "..", "..", "..", "..", "..", "views", "accounts", "emails", "confirmateRegister.hbs")
         const token = uuidV4()

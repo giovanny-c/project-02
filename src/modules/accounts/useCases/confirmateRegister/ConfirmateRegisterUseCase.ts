@@ -17,7 +17,7 @@ class ConfirmateRegisterUseCase {
         @inject("UsersRepository")
         private usersRepository: UsersRepository,
         @inject("DayjsDateProvider")
-        private DateProvider: IDateProvider
+        private dateProvider: IDateProvider
     ) {
 
     }
@@ -31,7 +31,7 @@ class ConfirmateRegisterUseCase {
         }
 
         //se a data de expiração 
-        if (this.DateProvider.compareIfBefore(token.expires_date, this.DateProvider.dateNow())) {
+        if (this.dateProvider.compareIfBefore(token.expires_date, this.dateProvider.dateNow())) {
             throw new Error("Token expired")
         }
 
