@@ -14,7 +14,7 @@ class SendForgotPasswordMailController {
 
         await sendForgotPasswordMail.execute(email)
 
-        return res.status(200).send()
+        return res.status(200).send("A reset password email was sent to you, please verify your inbox")
 
     }
 }

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { JwtPayload, verify } from "jsonwebtoken";
 
 import auth from "../../config/auth";
+import { AppError } from "../errors/AppError";
 import { errorHandler } from "../errors/ErrorHandler";
 
 
@@ -15,7 +16,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
     // const t = req.headers['x-access-token']//?['refresh_token']
 
     if (!authHeader) {
-        throw new Error("Token missing")
+        throw new AppError("Token missing", 400)
     }
 
     const [, token] = authHeader.split(" ")

@@ -3,6 +3,7 @@ import { inject, injectable } from "tsyringe";
 
 import { IUsersTokensRepository } from "../../../../modules/accounts/repositories/IUsersTokensRepository"
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
+import { AppError } from "../../../../shared/errors/AppError";
 import { UsersRepository } from "../../repositories/implementations/UsersRepository";
 
 
@@ -27,20 +28,19 @@ class ConfirmateRegisterUseCase {
         const token = await this.usersTokensRepository.findByRefreshToken(confirmationToken)
 
         if (!token) {
-            throw new Error("Invalid Token")
+            throw new AppError("Invalid Token")
         }
 
         //se a data de expiração 
         if (this.dateProvider.compareIfBefore(token.expires_date, this.dateProvider.dateNow())) {
-            throw new Error("Token expired")
+            throw new AppError("Token expired")
         }
 
         const user = await this.usersRepository.findById(token.user_id)
 
         user.is_confirmed = true
 
-        const teste = await this.usersRepository.create(user)
-        console.log(teste)
+        await this.usersRepository.create(user)
 
         await this.usersTokensRepository.deleteById(token.id)
 

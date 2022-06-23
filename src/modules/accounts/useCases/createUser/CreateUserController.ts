@@ -1,6 +1,7 @@
 import { container } from "tsyringe";
 import { Request, Response } from "express";
 import { CreateUserUseCase } from "./CreateUserUseCase";
+import { SendConfirmationRegisterMailUseCase } from "../sendConfirmationRegisterMail/SendConfirmationRegisterMailUseCase";
 
 
 
@@ -12,9 +13,15 @@ class CreateUserController {
 
         const createUser = container.resolve(CreateUserUseCase)
 
-        createUser.execute({ name, email, password })
+        const sendConfirmationRegisterMail = container.resolve(SendConfirmationRegisterMailUseCase)
 
-        return res.status(200).send()
+
+        await createUser.execute({ name, email, password })
+
+        await sendConfirmationRegisterMail.execute(email)
+
+
+        return res.status(200).json("A confirmation email was sent to the email provided. Please verify your inbox to confirm your sign-in")
     }
 
 

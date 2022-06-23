@@ -6,6 +6,7 @@ import { IDateProvider } from "../../../../shared/container/providers/dateProvid
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
 import { v4 as uuidV4 } from "uuid"
+import { AppError } from "../../../../shared/errors/AppError";
 
 interface IResponse {
     user: {
@@ -37,13 +38,13 @@ class AuthenticateUserUseCase {
         const { expires_refresh_token_days, secret_refresh_token, expires_in_refresh_token, secret_token, expires_in_token } = auth
 
         if (!user) {
-            throw new Error("email or password incorrect")
+            throw new AppError("email or password incorrect")
         }
 
         const passwordMatch = await compare(password, user.password)
 
         if (!passwordMatch) {
-            throw new Error("email or password incorrect")
+            throw new AppError("email or password incorrect")
         }
 
 

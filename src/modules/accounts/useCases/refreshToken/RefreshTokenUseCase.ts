@@ -6,6 +6,7 @@ import { UsersTokens } from "../../entities/UsersTokens";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
+import { AppError } from "../../../../shared/errors/AppError";
 
 interface IResponse {
     token: string
@@ -35,7 +36,7 @@ class RefreshTokenUseCase {
 
         //verificar se o token existe
         if (!refreshToken) {
-            throw new Error("Token Missing. Please Log-in")
+            throw new AppError("Token Missing. Please Log-in")
         }
 
         //ou esta invalido
@@ -44,7 +45,7 @@ class RefreshTokenUseCase {
             //invalida todos os tokens da mesma familia(mesmo criados posteriormente)
             await this.usersTokensRepository.setTokenFamilyAsInvalid({ token_family: refreshToken.token_family })
 
-            throw new Error("Conection expired (Invalid token). Please Log-in again. 400")
+            throw new AppError("Conection expired (Invalid token). Please Log-in again", 400)
 
         }
         //se ja foi usado
@@ -53,7 +54,7 @@ class RefreshTokenUseCase {
             await this.usersTokensRepository.setTokenFamilyAsInvalid({ token_family: refreshToken.token_family })
 
             //desloga usuario (user tem que logar dnv para gerar um novo token de outra familia)
-            throw new Error("Conection expired (Invalid token). Please Log-in again. 400")
+            throw new AppError("Conection expired (Invalid token). Please Log-in again. ", 400)
 
 
         }
@@ -63,7 +64,7 @@ class RefreshTokenUseCase {
             //marca como usado e invalido
             this.usersTokensRepository.setTokenAsInvalidAndUsed(refreshToken.id)
 
-            throw new Error("Conection expired (token expired). Please Log-in again. 400")
+            throw new AppError("Conection expired (token expired). Please Log-in again. ", 400)
         }
 
 
@@ -73,7 +74,7 @@ class RefreshTokenUseCase {
 
         //se o user nao estiver marcado como logado
         if (is_logged === false) {
-            throw new Error("Conection expired (token expired). Please Log-in again. 400")
+            throw new AppError("Conection expired (token expired). Please Log-in again. ", 400)
 
         }
 
