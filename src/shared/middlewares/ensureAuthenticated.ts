@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { JwtPayload, verify } from "jsonwebtoken";
 
-import auth from "../../config/auth";
 import { AppError } from "../errors/AppError";
-import { errorHandler } from "../errors/ErrorHandler";
+
 
 
 export async function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
@@ -22,7 +21,7 @@ export async function ensureAuthenticated(req: Request, res: Response, next: Nex
     const [, token] = authHeader.split(" ")
     //separar os tokens com espaço
 
-    verify(token, auth.secret_token, (err, decoded: string | JwtPayload) => {
+    verify(token, process.env.SECRET_TOKEN as string, (err, decoded: string | JwtPayload) => {
 
         if (err) {
 

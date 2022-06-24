@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
-import { verify } from "jsonwebtoken";
-import auth from "../../../../config/auth";
+
+
 
 
 @injectable()

@@ -1,7 +1,6 @@
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
-import auth from "../../../../config/auth";
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
@@ -35,7 +34,6 @@ class AuthenticateUserUseCase {
 
         const user = await this.usersRepository.findByEmail(email)
 
-        const { expires_refresh_token_days, secret_refresh_token, expires_in_refresh_token, secret_token, expires_in_token } = auth
 
         if (!user) {
             throw new AppError("email or password incorrect")
@@ -54,21 +52,21 @@ class AuthenticateUserUseCase {
         await this.usersTokensRepository.deleteByUserId(user.id as string)
 
         //bearer token/ id token
-        const token = sign({ email }, secret_token, {
+        const token = sign({ email }, process.env.SECRET_TOKEN as string, {
             subject: user.id,
-            expiresIn: expires_in_token
+            expiresIn: process.env.EXPIRES_IN_TOKEN as string
         })
 
         //refresh token
-        const refresh_token = sign({}, secret_refresh_token, {
+        const refresh_token = sign({}, process.env.SECRET_REFRESH_TOKEN as string, {
             subject: user.id,
-            expiresIn: expires_in_refresh_token
+            expiresIn: process.env.EXPIRES_IN_REFRESH_TOKEN as string
         })
 
         //cria a familia do refresh token
         const token_family = uuidV4()
 
-        const refresh_token_expires_date = this.DateProvider.addOrSubtractTime("add", "day", expires_refresh_token_days)
+        const refresh_token_expires_date = this.DateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
 
         await this.usersTokensRepository.create({
             refresh_token: refresh_token,

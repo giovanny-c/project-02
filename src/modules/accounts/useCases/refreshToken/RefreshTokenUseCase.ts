@@ -1,8 +1,7 @@
 
 import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
-import auth from "../../../../config/auth";
-import { UsersTokens } from "../../entities/UsersTokens";
+
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 import { IUsersTokensRepository } from "../../repositories/IUsersTokensRepository";
 import { IDateProvider } from "../../../../shared/container/providers/dateProvider/IDateProvider";
@@ -79,19 +78,19 @@ class RefreshTokenUseCase {
         }
 
         //cria um novo token
-        const newToken = sign({ email }, auth.secret_token, {
+        const newToken = sign({ email }, process.env.SECRET_TOKEN as string, {
             subject: user_id,
-            expiresIn: auth.expires_in_token
+            expiresIn: process.env.EXPIRES_IN_TOKEN as string
         })
 
         //cria um novo rf
-        const newRefreshToken = sign({}, auth.secret_refresh_token, {
+        const newRefreshToken = sign({}, process.env.SECRET_REFRESH_TOKEN as string, {
             subject: user_id, // com o mesmo user id
-            expiresIn: auth.expires_in_refresh_token
+            expiresIn: process.env.EXPIRES_IN_REFRESH_TOKEN as string
         })
 
         //nova data de expiração
-        const newRefreshTokenExpiresDate = this.dateProvider.addOrSubtractTime("add", "day", auth.expires_refresh_token_days)
+        const newRefreshTokenExpiresDate = this.dateProvider.addOrSubtractTime("add", "day", Number(process.env.EXPIRES_REFRESH_TOKEN_DAYS))
 
         //e cria outro rf token da mesma familia no bd
         await this.usersTokensRepository.create({
