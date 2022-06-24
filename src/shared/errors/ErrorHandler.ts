@@ -18,7 +18,7 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
     if (err instanceof TokenExpiredError) { //se o token tiver expirado
 
 
-        //como passar daaqui para rota refresh-token?
+
 
         return res.status(401).send({ message: "token expired (go to /refresh-token), Please Log-in again" })
 
@@ -27,14 +27,14 @@ export function errorHandler(err: Error, req: Request, res: Response, next: Next
 
     }
 
-    if (err instanceof JsonWebTokenError) { //se o token tiver expirado
+    if (err instanceof JsonWebTokenError) { //se for outro erro relacionado ao token
 
 
-        //como passar daaqui para rota refresh-token?
+
 
         return res.status(401).send({ message: "invalid token. Please Log-in to authenticate" })
 
-        //return res.redirect("/accounst/refresh-token"); ?
+
 
 
     }

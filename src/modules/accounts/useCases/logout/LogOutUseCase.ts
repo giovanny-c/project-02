@@ -24,6 +24,8 @@ class LogOutUseCase {
         await this.usersTokensRepository.setTokenFamilyAsInvalid({ user_id })
 
 
+        //remover o bearer token do user pelo front
+
     }
 
 

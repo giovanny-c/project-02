@@ -7,7 +7,7 @@ class SignInController {
     handle(req: Request, res: Response): any {
 
 
-        return res.render("views/accounts/signIn.njk")
+        return res.render("views/accounts/signIn")
     }
 
 }
